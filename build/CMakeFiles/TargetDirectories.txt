@@ -1,0 +1,6 @@
+/home/raum/robocar_jurek_cpp/build/CMakeFiles/clean_test_results.dir
+/home/raum/robocar_jurek_cpp/build/CMakeFiles/doxygen.dir
+/home/raum/robocar_jurek_cpp/build/gtest/CMakeFiles/gtest.dir
+/home/raum/robocar_jurek_cpp/build/gtest/CMakeFiles/gtest_main.dir
+/home/raum/robocar_jurek_cpp/build/CMakeFiles/run_tests.dir
+/home/raum/robocar_jurek_cpp/build/CMakeFiles/tests.dir
