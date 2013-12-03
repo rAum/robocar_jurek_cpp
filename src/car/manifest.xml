@@ -1,0 +1,15 @@
+<package>
+  <description brief="car">
+
+     car
+
+  </description>
+  <author>Piotr Gródek</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/car</url>
+  <depend package="roscpp"/>
+
+</package>
+
+
