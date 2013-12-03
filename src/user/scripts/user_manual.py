@@ -1,4 +1,4 @@
-#echo!/usr/bin/env python
+#!/usr/bin/python
 
 import sys
 import rospy
@@ -22,11 +22,8 @@ class RosCommunication(QtCore.QObject):
         #print 'check ROS communicates - ros_spin()'
 
     def publish(self, what, value):
-	if rospy.is_shutdown():
-		rospy.loginfo('not publish, rospy is shutdown.')
-		print ':('
-		return
-	rospy.loginfo(what + ' < ' + str(value))
+	if rospy.is_shutdown(): return
+	rospy.loginfo(what + ' <-- ' + str(value))
         self.pub[what].publish(Int32(value))
 
     def steer_changed(self, value):
