@@ -164,7 +164,7 @@ class MainWindow(QtGui.QWidget):
         key = event.key()
 
         if key == QtCore.Qt.Key_Space:
-            self.brake_display.setValue(self.brake.minimum())
+            self.brake_display.setValue(self.brake_display.minimum())
 
 
 if __name__ == '__main__':
