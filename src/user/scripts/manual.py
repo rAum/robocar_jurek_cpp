@@ -12,6 +12,21 @@ def label_gen(text):
     l.setAlignment(QtCore.Qt.AlignCenter)
     return l
 
+class TopicSub:
+	def __init__(self, topic_short, topic, msg_type):
+		self.topic = topic
+		self.sub   = rospy.Subscriber(topic, msg_type, self.send)
+		self.send_callback = None
+	def send(self, value):
+		print self.topic, value
+		if self.send_callback != None:
+			self.send_callback(self.topic, value)
+
+	def set_callback(self, func):
+		self.send_callback = func
+
+
+
 class RosCommunication(QtCore.QObject):
     """Simple class to publish and subscribe ROS topics to 
     manual control car and see some data"""
@@ -23,7 +38,6 @@ class RosCommunication(QtCore.QObject):
 
     def publish(self, what, value):
 	if rospy.is_shutdown(): return
-	rospy.loginfo(what + ' <-- ' + str(value))
         self.pub[what].publish(Int32(value))
 
     def steer_changed(self, value):
@@ -41,20 +55,24 @@ class RosCommunication(QtCore.QObject):
     def timerEvent(self, tim):
         self.update()
 
+   
     def __init__(self):
         super(RosCommunication, self).__init__()
         root_topic  = '/car/'
         self.topics = ['speed', 'steering_wheel', 'break', 'throttle']
 
         self.pub = { topic : rospy.Publisher(root_topic + 'set_' + topic, Int32) for topic in self.topics }
-        #self.sub = { topic : (root_topic + 'get_' + topic, Foo()) for topic in self.topics }
+        self.sub = { topic : TopicSub(topic, root_topic + 'val_' + topic, Int32) for topic in self.topics }
 
-        rospy.init_node('user', disable_signals=True)
+        rospy.init_node('user')
 
         self.timer = QtCore.QBasicTimer()
 
     def start(self):
         self.timer.start(10, self)
+
+    def subscribe(self, topic, function):
+	self.sub[topic].set_callback(function)
 
 class MainWindow(QtGui.QWidget):
     def __init__(self):
@@ -71,10 +89,14 @@ class MainWindow(QtGui.QWidget):
         self.speed_valueChanged.connect(self.communicator.speed_changed)
 
         self.communicator.start()
+	self.communicator.subscribe('steering_wheel', self.valueDisplay)
+
+    def valueDisplay(self, name, value):
+	print name, value
 
 
     def initUI(self): #layout building
-        self.resize(400,300)
+        self.resize(500,400)
         self.setWindowTitle('Jurek Autonomous Vehicle Manual Control')
 
         self.speed_label = label_gen('Predkosc [km/h]')
@@ -85,11 +107,13 @@ class MainWindow(QtGui.QWidget):
         self.break_display    = QtGui.QProgressBar(self)
         self.break_display.setOrientation(QtCore.Qt.Vertical)
         self.break_display.setRange(0, 100)
+	self.break_display.setValue(0)
 
         self.throttle_label   = label_gen('Gaz')
         self.throttle_display = QtGui.QProgressBar(self)
         self.throttle_display.setOrientation(QtCore.Qt.Vertical)
         self.throttle_display.setRange(0, 100)
+	self.throttle_display.setValue(0)
 
         self.steering_label   = label_gen('Kierownica')
         self.steering_display = QtGui.QDial(self)
@@ -131,6 +155,10 @@ class MainWindow(QtGui.QWidget):
             self.steering_display.setValue(self.steering_display.value() + 8)
         elif key == QtCore.Qt.Key_Space:
             self.break_display.setValue(self.break_display.maximum())
+	elif key == QtCore.Qt.Key_Q:
+	    self.throttle_display.setValue(self.throttle_display.value()+2)
+	elif key == QtCore.Qt.Key_E:
+	    self.throttle_display.setValue(self.throttle_display.value()-4)
 
     def keyReleaseEvent(self, event):
         key = event.key()
