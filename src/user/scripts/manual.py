@@ -46,8 +46,8 @@ class RosCommunication(QtCore.QObject):
     def speed_changed(self, value):
         self.publish('speed', value)
 
-    def break_changed(self, value):
-        self.publish('break', value)
+    def brake_changed(self, value):
+        self.publish('brake', value)
 
     def throttle_changed(self, value):
        self.publish('throttle', value)
@@ -59,7 +59,7 @@ class RosCommunication(QtCore.QObject):
     def __init__(self):
         super(RosCommunication, self).__init__()
         root_topic  = '/car/'
-        self.topics = ['speed', 'steering_wheel', 'break', 'throttle']
+        self.topics = ['speed', 'steering_wheel', 'brake', 'throttle']
 
         self.pub = { topic : rospy.Publisher(root_topic + 'set_' + topic, Int32) for topic in self.topics }
         self.sub = { topic : TopicSub(topic, root_topic + 'val_' + topic, Int32) for topic in self.topics }
@@ -84,7 +84,7 @@ class MainWindow(QtGui.QWidget):
         self.communicator = RosCommunication()
 
         self.steering_display.valueChanged.connect(self.communicator.steer_changed)
-        self.break_display.valueChanged.connect(self.communicator.break_changed)
+        self.brake_display.valueChanged.connect(self.communicator.brake_changede
         self.throttle_display.valueChanged.connect(self.communicator.throttle_changed)
         self.speed_valueChanged.connect(self.communicator.speed_changed)
 
@@ -103,11 +103,11 @@ class MainWindow(QtGui.QWidget):
         self.speed_display = QtGui.QLCDNumber(self)
         self.speed_display.display(0)
 
-        self.break_label      = label_gen('Hamulec')
-        self.break_display    = QtGui.QProgressBar(self)
-        self.break_display.setOrientation(QtCore.Qt.Vertical)
-        self.break_display.setRange(0, 100)
-	self.break_display.setValue(0)
+        self.brake_label      = label_gen('Hamulec')
+        self.brake_display    = QtGui.QProgressBar(self)
+        self.brake_display.setOrientation(QtCore.Qt.Vertical)
+        self.brake_display.setRange(0, 100)
+	self.brake_display.setValue(0)
 
         self.throttle_label   = label_gen('Gaz')
         self.throttle_display = QtGui.QProgressBar(self)
@@ -127,8 +127,8 @@ class MainWindow(QtGui.QWidget):
         grid.addWidget(self.steering_label,   8, 0, 1, 8)
         grid.addWidget(self.speed_display,    0, 9, 2, 4)
         grid.addWidget(self.speed_label,      2, 9, 1, 4)
-        grid.addWidget(self.break_label,      8, 9, 1, 2)
-        grid.addWidget(self.break_display,    3, 9, 5, 1)
+        grid.addWidget(self.brake_label,      8, 9, 1, 2)
+        grid.addWidget(self.brake_display,    3, 9, 5, 1)
         grid.addWidget(self.throttle_label,   8, 11, 1, 2)
         grid.addWidget(self.throttle_display, 3, 11, 5, 1)
 
@@ -154,7 +154,7 @@ class MainWindow(QtGui.QWidget):
         elif key == QtCore.Qt.Key_D:
             self.steering_display.setValue(self.steering_display.value() + 8)
         elif key == QtCore.Qt.Key_Space:
-            self.break_display.setValue(self.break_display.maximum())
+            self.brake_display.setValue(self.brake_display.maximum())
 	elif key == QtCore.Qt.Key_Q:
 	    self.throttle_display.setValue(self.throttle_display.value()+2)
 	elif key == QtCore.Qt.Key_E:
@@ -164,7 +164,7 @@ class MainWindow(QtGui.QWidget):
         key = event.key()
 
         if key == QtCore.Qt.Key_Space:
-            self.break_display.setValue(self.break_display.minimum())
+            self.brake_display.setValue(self.brake.minimum())
 
 
 if __name__ == '__main__':

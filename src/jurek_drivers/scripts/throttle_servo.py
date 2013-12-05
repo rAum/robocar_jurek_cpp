@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+########WARN: This must be executed in the same directory, where UscCmd app is too############# 
+
 from subprocess import check_call
 import rospy
 from std_msgs.msg import Int32
