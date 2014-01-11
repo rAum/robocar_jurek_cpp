@@ -1,0 +1,1 @@
+Propozycja programu będącego prostym symulatorem dynamiki. Dla przykładu użyto podwójnego wahadła, bo równania są w miarę krótkie. Oczywiście Solver poradzi sobie z dowolnie skomplikowanymi równaniami, ewentualnym problemem może być czas wykonywania się obliczeń.
