@@ -1,1 +1,3 @@
 Propozycja programu będącego prostym symulatorem dynamiki. Dla przykładu użyto podwójnego wahadła, bo równania są w miarę krótkie. Oczywiście Solver poradzi sobie z dowolnie skomplikowanymi równaniami, ewentualnym problemem może być czas wykonywania się obliczeń.
+
+Program można budować korzystając z systemu CMake, lub QMake. Aby użyć QMake należy skorzystać z pliku Makefile w głównym katalogu projektu. Aby użyć CMake należy wywołać go z poziomu katalogu build na rzecz CMakeLists.txt w głównym katalogu projektu.
